@@ -1,5 +1,6 @@
 from platform import *
 
+bg = pygame.image.load('background.png')
 class Level():
 
 	def __init__(self, player, lop):
@@ -20,7 +21,9 @@ class Level():
 		self.enemy_list.update()
 
 	def draw(self, screen):
-		screen.fill((0,0,255))
+		screen.fill((255,255,255))
+		screen.blit(bg, (0,0))	
+
 		self.platform_list.draw(screen)
 		self.enemy_list.draw(screen)
 
@@ -35,7 +38,7 @@ class Level():
 		
 # level format
 # [width, height, x, y] 
-level_1 = [ [80, 20, 200, 700], 
-			[80, 20, 300, 600],
-			[80, 30, 400, 500],
-			[80, 30, 500, 400]]
+level_1 = [ [80, 20, 200, 900], 
+			[80, 20, 300, 800],
+			[80, 30, 400, 700],
+			[80, 30, 500, 600]]

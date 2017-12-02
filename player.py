@@ -1,4 +1,8 @@
 import pygame 
+#import spritesheet
+#ss = spritesheet('hero_spritesheet.png')
+
+image = pygame.image.load('hero_spritesheet.png')
 
 class Player(pygame.sprite.Sprite):
 
@@ -7,18 +11,40 @@ class Player(pygame.sprite.Sprite):
 
 		width = 40
 		height = 60
-
-		self.image = pygame.Surface([width,height])
-		self.image.fill((255,0,0))
+		self.sprites = [(22,209,54,67), 
+						(102,207,54,67), 
+						(176,207,59,66),
+						(261,207,54,67),
+						(340,207,55,66),
+						(415,207,59,65)]
+		self.sprite_index = 0
+		self.images = []
+		self.images.append(image.subsurface(self.sprites[0]))
+		self.images.append(image.subsurface(self.sprites[1]))
+		self.images.append(image.subsurface(self.sprites[2]))
+		self.images.append(image.subsurface(self.sprites[3]))
+		self.images.append(image.subsurface(self.sprites[4]))
+		self.images.append(image.subsurface(self.sprites[5]))
+		self.image = self.images[self.sprite_index]
 		self.rect = self.image.get_rect()
 
+		self.tick = 0
+		self.change_tick = 0
 		self.change_x = 0
 		self.change_y = 0
 
 		self.level = None
 
 	def update(self):
+		
 		self.gravity()
+		self.tick += self.change_tick
+		if self.tick > 5:
+			self.sprite_index += 1
+			if self.sprite_index > 5: 
+				self.sprite_index = 0
+			self.image = self.images[self.sprite_index]
+			self.tick = 0
 
 		self.rect.x += self.change_x
 
@@ -46,23 +72,26 @@ class Player(pygame.sprite.Sprite):
 		else:
 			self.change_y += 1
 
-		if self.rect.y >= 800 - self.rect.height and self.change_y >= 0:
+		if self.rect.y >= 990 - self.rect.height and self.change_y >= 0:
 			self.change_y = 0;
-			self.rect.y = 800 - self.rect.height
+			self.rect.y = 990 - self.rect.height
 
 	def go_left(self):
 		self.change_x = -6
+		self.change_tick = 1
 	def go_right(self):
 		self.change_x = 6
+		self.change_tick = 1
 	def stop(self):
 		self.change_x = 0
+		self.change_tick = 0
 
 	def jump(self):
 		self.rect.y += 2
 		platform_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
 		self.rect.y -= 2
 
-		if len(platform_hit_list) > 0 or self.rect.bottom >= 800:
+		if len(platform_hit_list) > 0 or self.rect.bottom >= 990:
 			self.change_y = -150
 	
 
