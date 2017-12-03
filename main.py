@@ -3,7 +3,7 @@ from player import *
 from platform import *
 from level import *
 from projectile import *
-
+from enemy import *
 pygame.init()
 width = 1500
 height = 990
@@ -16,12 +16,25 @@ pygame.mixer.music.play(-1)
 
 
 running = True
-
+score = 0
 player = Player()
-player.rect.x = 100
+player.rect.x = 50
 player.rect.y = 500
 
-level1 = Level(player, level_1)
+enemy = Enemy()
+enemy.rect.x = 1200
+enemy.rect.y = 860
+enemy1 = Enemy()
+enemy1.rect.x = 700
+enemy1.rect.y = 860
+enemy2 = Enemy()
+enemy2.rect.x = 300
+enemy2.rect.y = 860
+enemy3 = Enemy()
+enemy3.rect.x = 1550
+enemy3.rect.y = 520
+enemies = [enemy, enemy1, enemy2, enemy3]
+level1 = Level(player, enemies, level_1)
 
 projectile = []
 for i in range(10):
@@ -40,6 +53,9 @@ for project in projectile:
 active_sprite_list.add(projectile)
 
 player.level = level1
+for enemy in enemies:
+	enemy.level = level1
+
 
 clock = pygame.time.Clock()
 
@@ -80,7 +96,21 @@ while running:
 		diff = 120 - player.rect.left 
 		player.rect.left = 120
 		level1.shift_world(diff)
-		
+
+	
+	collision = pygame.sprite.spritecollide(player, level1.enemy_list, True)
+	if collision:
+
+		running = False
+		print("You lose")
+	for project in projectile:	
+		collisions = pygame.sprite.spritecollide(project, level1.enemy_list, True) 
+		if collisions:
+			score += 1
+			project.reset()
+	if score == 4: 
+		print("You win!")
+		running = False
 	# Update	
 	level1.update()
 	active_sprite_list.update()

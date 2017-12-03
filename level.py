@@ -3,9 +3,11 @@ from platform import *
 bg = pygame.image.load('background.png')
 class Level():
 
-	def __init__(self, player, lop):
+	def __init__(self, player,enemies, lop):
 		self.platform_list = pygame.sprite.Group()
 		self.enemy_list = pygame.sprite.Group()
+		for enemy in enemies:
+			self.enemy_list.add(enemy)
 		self.player = player
 
 		for platform in lop:
@@ -38,7 +40,15 @@ class Level():
 		
 # level format
 # [width, height, x, y] 
-level_1 = [ [80, 20, 200, 900], 
-			[80, 20, 300, 800],
+level_1 = [ [80, 30, 200, 900], 
+			[80, 30, 300, 800],
 			[80, 30, 400, 700],
-			[80, 30, 500, 600]]
+			[80, 30, 500, 600],
+			[100, 690, 600, 600],
+			[50, 30, 700, 500],
+			[300, 400, 800, 540],
+			[2500, 50, 0, 940],
+			[300, 100, 1700, 890],
+			[50, 200, 1300, 400],
+			[50, 200, 1600, 400],
+			[350, 50, 1300, 600]]
